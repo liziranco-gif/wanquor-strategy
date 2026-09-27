@@ -252,8 +252,72 @@ img{max-width:100%;height:auto}
   .market-wave{width:110%!important;left:-5%!important}
 }
 .contact-routing-copy{color:#a99b88;font-size:13px;line-height:1.75;margin:14px 0 24px;max-width:620px}.btn:disabled{opacity:.55;cursor:wait;transform:none!important}</style>
+
+<style id="wanquor-password-style">
+html.wq-locked,html.wq-locked body{overflow:hidden}
+#wq-password-gate{position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(circle at 50% 35%,rgba(177,134,62,.10),transparent 34%),#090a0c;color:#f5f2ea;font-family:Inter,Arial,sans-serif}
+#wq-password-gate[hidden]{display:none}
+#wq-password-card{width:min(420px,100%);padding:34px 32px 30px;border:1px solid rgba(215,176,96,.34);background:rgba(15,16,19,.96);box-shadow:0 28px 80px rgba(0,0,0,.5);border-radius:18px;text-align:center}
+#wq-password-mark{width:88px;height:88px;margin:0 auto 20px;display:block}
+#wq-password-card h1{margin:0 0 10px;font-size:24px;font-weight:600;letter-spacing:.02em}
+#wq-password-card p{margin:0 0 20px;color:#aaa79f;font-size:14px;line-height:1.6}
+#wq-password-form{display:flex;gap:10px}
+#wq-password-input{min-width:0;flex:1;padding:13px 14px;border:1px solid rgba(255,255,255,.15);border-radius:10px;background:#0c0d0f;color:#fff;outline:none;font-size:15px}
+#wq-password-input:focus{border-color:#d6ae5c;box-shadow:0 0 0 3px rgba(214,174,92,.10)}
+#wq-password-submit{padding:13px 18px;border:0;border-radius:10px;background:#d6ae5c;color:#111;font-weight:700;cursor:pointer}
+#wq-password-error{min-height:20px;margin-top:12px!important;margin-bottom:0!important;color:#d67f72!important;font-size:13px!important}
+@media(max-width:520px){#wq-password-form{flex-direction:column}#wq-password-submit{width:100%}}
+</style>
 </head>
 <body>
+<div id="wq-password-gate" hidden>
+  <div id="wq-password-card">
+    <img id="wq-password-mark" src="/wanquor-avatar.svg" alt="Wanquor Strategy">
+    <h1>Private Access</h1>
+    <p>Enter the access password to continue to Wanquor Strategy.</p>
+    <form id="wq-password-form" autocomplete="off">
+      <input id="wq-password-input" type="password" inputmode="numeric" placeholder="Access password" aria-label="Access password" required>
+      <button id="wq-password-submit" type="submit">Enter</button>
+    </form>
+    <p id="wq-password-error" aria-live="polite"></p>
+  </div>
+</div>
+<script id="wanquor-password-script">
+(function(){
+  var KEY='wanquor_access_v1';
+  var PASSWORD='641200';
+  var unlocked=false;
+  try{unlocked=sessionStorage.getItem(KEY)==='ok'}catch(e){}
+  function show(){
+    if(unlocked)return;
+    document.documentElement.classList.add('wq-locked');
+    var gate=document.getElementById('wq-password-gate');
+    if(gate){gate.hidden=false;setTimeout(function(){var i=document.getElementById('wq-password-input');if(i)i.focus()},50)}
+  }
+  function init(){
+    if(unlocked)return;
+    var form=document.getElementById('wq-password-form');
+    var input=document.getElementById('wq-password-input');
+    var error=document.getElementById('wq-password-error');
+    if(!form||!input)return;
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      if(input.value===PASSWORD){
+        try{sessionStorage.setItem(KEY,'ok')}catch(e){}
+        document.documentElement.classList.remove('wq-locked');
+        document.getElementById('wq-password-gate').hidden=true;
+        input.value='';
+        error.textContent='';
+      }else{
+        error.textContent='Incorrect password. Please try again.';
+        input.select();
+      }
+    });
+    show();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
 <div class="noise"></div><div class="progress" id="progress"></div>
 <div id="intro"><div class="intro-mark"><img alt="Wanquor Strategy" src="7b2f6b99ce3d3d90.png"/><div class="intro-line"></div><div class="intro-copy">See the Market Differently</div></div><button id="skipIntro">Skip intro</button></div>
 <header class="site-header"><a class="brand route" href="#home"><img alt="Wanquor Strategy" src="7b2f6b99ce3d3d90.png"/></a><nav class="primary-nav" id="nav">
